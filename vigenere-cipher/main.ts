@@ -67,6 +67,7 @@ class VigenereCipher {
   }
 }
 
+// ----------- код ниже этой строки отвечает за взаимодействие с элементами интерфейса на странице, подробно описывать не буду -----------
 const encoder = VigenereCipher.getInstance();
 const errorBox = document.getElementById('error');
 

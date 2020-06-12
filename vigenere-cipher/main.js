@@ -58,6 +58,7 @@ class VigenereCipher {
         return result.slice(0, text.length); // после чего возвращает ее, обрезав до длины исходного текста
     }
 }
+// ----------- код ниже этой строки отвечает за взаимодействие с элементами интерфейса на странице, подробно описывать не буду -----------
 const encoder = VigenereCipher.getInstance();
 const errorBox = document.getElementById('error');
 const text1 = document.getElementById('text');
