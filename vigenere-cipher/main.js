@@ -1,6 +1,6 @@
 class VigenereCipher {
     constructor() {
-        this._symbolCodeRange = [[48, 57], [65, 90], [97, 122], [1040, 1071], [1072, 1103]]; // заглавные латинские буквы
+        this._symbolCodeRange = [[9, 10], [32, 47], [48, 57], [58, 64], [65, 90], [97, 122], [1040, 1071], [1072, 1103]]; // поддерживаемые символы
         this._defaultAlphabet = []; // массив для заполнения символами алфавита
         this._tabulaRecta = []; // двумерный массив для хранения таблицы Виженера
         for (let j = 0; j < this._symbolCodeRange.length; j++) {
@@ -58,18 +58,41 @@ class VigenereCipher {
         return result.slice(0, text.length); // после чего возвращает ее, обрезав до длины исходного текста
     }
 }
-const encoder = VigenereCipher.getInstance();                        // далее идет код связывания вышеописанных функций
-const text1 = document.getElementById('text');                       // с пользовательским интерфейсом на странице
+const encoder = VigenereCipher.getInstance();
+const errorBox = document.getElementById('error');
+const text1 = document.getElementById('text');
 const key1 = document.getElementById('key');
 const buttonEncode = document.getElementById('encode_button');
 const result1 = document.getElementById('result');
 buttonEncode.addEventListener('click', () => {
-    result1.textContent = encoder.encode(text1.value, key1.value);
+    try {
+        if (!text1.value)
+            throw new Error('не введен текс для шифрования');
+        if (!key1.value)
+            throw new Error('не введен ключ шифрования');
+        errorBox.textContent = '';
+        result1.textContent = encoder.encode(text1.value, key1.value);
+    }
+    catch (err) {
+        console.error(err.message);
+        errorBox.textContent = `Ошибка: ${err.message}!`;
+    }
 });
 const text2 = document.getElementById('text2');
 const key2 = document.getElementById('key2');
 const buttonDecode = document.getElementById('decode_button');
 const result2 = document.getElementById('result2');
 buttonDecode.addEventListener('click', () => {
-    result2.textContent = encoder.decode(text2.value, key2.value);
+    try {
+        if (!text2.value)
+            throw new Error('не введен текс для расшифровки');
+        if (!key2.value)
+            throw new Error('не введен ключ для расшифровки');
+        errorBox.textContent = '';
+        result2.textContent = encoder.decode(text2.value, key2.value);
+    }
+    catch (err) {
+        console.error(err.message);
+        errorBox.textContent = `Ошибка: ${err.message}!`;
+    }
 });

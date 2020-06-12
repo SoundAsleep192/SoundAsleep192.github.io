@@ -41,3 +41,10 @@
     height: 35px;
     margin-bottom: 20px;
 }
+
+.error {
+    color: red;
+    text-decoration: dotted;
+    font-size: large;
+    font-weight: bold;
+}

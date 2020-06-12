@@ -1,5 +1,5 @@
 class VigenereCipher {
-  private _symbolCodeRange = [[48, 57], [65, 90], [97, 122], [1040, 1071], [1072, 1103]]; // заглавные латинские буквы
+  private _symbolCodeRange = [[9, 10], [32, 47], [48, 57], [58, 64], [65, 90], [97, 122], [1040, 1071], [1072, 1103]]; // поддерживаемые символы
   private _defaultAlphabet: string[] = []; // массив для заполнения символами алфавита
   private _tabulaRecta: string[][] = []; // двумерный массив для хранения таблицы Виженера
   private static instance: VigenereCipher;
@@ -68,6 +68,7 @@ class VigenereCipher {
 }
 
 const encoder = VigenereCipher.getInstance();
+const errorBox = document.getElementById('error');
 
 const text1 = <HTMLInputElement>document.getElementById('text');
 const key1 = <HTMLInputElement>document.getElementById('key');
@@ -75,7 +76,15 @@ const buttonEncode = <HTMLInputElement>document.getElementById('encode_button');
 const result1 = <HTMLInputElement>document.getElementById('result');
 
 buttonEncode.addEventListener('click', () => {
-  result1.textContent = encoder.encode(text1.value, key1.value);
+  try {
+    if (!text1.value) throw new Error('не введен текс для шифрования');
+    if (!key1.value) throw new Error('не введен ключ шифрования');
+    errorBox.textContent = '';
+    result1.textContent = encoder.encode(text1.value, key1.value);
+  } catch (err) {
+    console.error(err.message);
+    errorBox.textContent = `Ошибка: ${err.message}!`;
+  }
 });
 
 const text2 = <HTMLInputElement>document.getElementById('text2');
@@ -84,5 +93,14 @@ const buttonDecode = <HTMLInputElement>document.getElementById('decode_button');
 const result2 = <HTMLInputElement>document.getElementById('result2');
 
 buttonDecode.addEventListener('click', () => {
-  result2.textContent = encoder.decode(text2.value, key2.value);
+  try {
+    if (!text2.value) throw new Error('не введен текс для расшифровки');
+    if (!key2.value) throw new Error('не введен ключ для расшифровки');
+
+    errorBox.textContent = '';
+    result2.textContent = encoder.decode(text2.value, key2.value);
+  } catch (err) {
+    console.error(err.message);
+    errorBox.textContent = `Ошибка: ${err.message}!`;
+  }
 });
