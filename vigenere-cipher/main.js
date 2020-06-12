@@ -58,8 +58,8 @@ class VigenereCipher {
         return result.slice(0, text.length); // после чего возвращает ее, обрезав до длины исходного текста
     }
 }
-const encoder = VigenereCipher.getInstance();
-const text1 = document.getElementById('text');
+const encoder = VigenereCipher.getInstance();                        // далее идет код связывания вышеописанных функций
+const text1 = document.getElementById('text');                       // с пользовательским интерфейсом на странице
 const key1 = document.getElementById('key');
 const buttonEncode = document.getElementById('encode_button');
 const result1 = document.getElementById('result');
