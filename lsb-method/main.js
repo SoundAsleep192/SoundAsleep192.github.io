@@ -7,12 +7,15 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-const messageInput = document.getElementById('message');
+const messageInput = document.getElementById('message'); // выбор элементов интерфейса со страницы
 const encodeFileInput = document.getElementById('encodeFileInput');
 const encodeButton = document.getElementById('encodeButton');
 const downloadLink = document.createElement('a');
 const decodeFileInput = document.getElementById('decodeFileInput');
 const decodeButton = document.getElementById('decodeButton');
+// названия функций говорят сами за себя, типы данных везде указаны
+// я очень долго делал эту лабу и у меня наконец-то получилось
+// я не хочу комментировать каждую строчку потому что в этом нет смысла и сейчас 5 утра и я очень хочу спать
 encodeFileInput.addEventListener('change', () => __awaiter(this, void 0, void 0, function* () {
     const image = encodeFileInput.files[0];
     const imageBase64 = yield fileToBase64(image);
@@ -51,7 +54,7 @@ decodeButton.addEventListener('click', () => __awaiter(this, void 0, void 0, fun
 }));
 function encodeMessageIntoImageData(message, imgData) {
     return __awaiter(this, void 0, void 0, function* () {
-        const binaryMessage = yield messageToBinary(message);
+        const binaryMessage = yield messageToBinary(message); // и возвращает новое зашифрованное изображение
         const imagePixels = Array.from(imgData.data);
         let binaryMessageCounter = 0;
         for (let i = 0; i < imagePixels.length; i++) {
@@ -60,7 +63,7 @@ function encodeMessageIntoImageData(message, imgData) {
             if (binaryMessageCounter > binaryMessage.length)
                 break;
             let currentValue = imagePixels[i];
-            let encodedValue = ((currentValue >> 1) << 1) | binaryMessage[binaryMessageCounter];
+            let encodedValue = ((currentValue >> 1) << 1) | binaryMessage[binaryMessageCounter]; // ВОТ ТУТ собественно алгоритм шифрования отдельного бита пикселя
             imagePixels[i] = encodedValue;
             binaryMessageCounter++;
         }
@@ -76,10 +79,9 @@ function decodeImageData(imgData) {
             continue;
         if (binaryMessageCounter >= 32)
             break;
-        const leastSignificantBit = imagePixels[i] & 1;
+        const leastSignificantBit = imagePixels[i] & 1; // ВОТ ТУТ собственно формула расшифровки отдельного бита пикселя
         messageBinaryLength.push(leastSignificantBit);
         binaryMessageCounter++;
-        console.log(i);
     }
     const messageLength = parseInt(messageBinaryLength.join(''), 2);
     const messageLengthOfBits = (messageLength * 8) + binaryMessageCounter;

@@ -1,11 +1,15 @@
-const messageInput = <HTMLInputElement>document.getElementById('message');
+const messageInput = <HTMLInputElement>document.getElementById('message');              // выбор элементов интерфейса со страницы
 const encodeFileInput = <HTMLInputElement>document.getElementById('encodeFileInput');
 const encodeButton = document.getElementById('encodeButton');
 const downloadLink = document.createElement('a');
 const decodeFileInput = <HTMLInputElement>document.getElementById('decodeFileInput');
 const decodeButton = document.getElementById('decodeButton');
 
-encodeFileInput.addEventListener('change', async () => {
+// названия функций говорят сами за себя, типы данных везде указаны
+// я очень долго делал эту лабу и у меня наконец-то получилось
+// я не хочу комментировать каждую строчку потому что в этом нет смысла и сейчас 5 утра и я очень хочу спать
+
+encodeFileInput.addEventListener('change', async () => { // обработчик события выбора файла для шифровки
   const image = encodeFileInput.files[0];
   const imageBase64 = await fileToBase64(image);
 
@@ -14,7 +18,7 @@ encodeFileInput.addEventListener('change', async () => {
   document.getElementById('preview').appendChild(previewImage);
 });
 
-encodeButton.addEventListener('click', async () => {
+encodeButton.addEventListener('click', async () => {  // обработчик события нажатия на кнопку "Зашифровать"
   if (!encodeFileInput.files.length) return;
   const image = encodeFileInput.files[0];
   const imageBase64 = await fileToBase64(image);
@@ -30,7 +34,7 @@ encodeButton.addEventListener('click', async () => {
   document.getElementById('result').appendChild(downloadLink);
 })
 
-decodeFileInput.addEventListener('change', async () => {
+decodeFileInput.addEventListener('change', async () => {  // обработчик события выбора файла для расшифровки
   const image = decodeFileInput.files[0];
   const imageBase64 = await fileToBase64(image);
 
@@ -39,7 +43,7 @@ decodeFileInput.addEventListener('change', async () => {
   document.getElementById('preview2').appendChild(previewImage);
 });
 
-decodeButton.addEventListener('click', async () => {
+decodeButton.addEventListener('click', async () => { // обработчик события нажатия на кнопку "Расшифровать"
   if (!decodeFileInput.files.length) return;
   const image = decodeFileInput.files[0];
   const imageBase64 = await fileToBase64(image);
@@ -50,8 +54,8 @@ decodeButton.addEventListener('click', async () => {
   document.getElementById('result2').textContent = decodedMessage;
 });
 
-async function encodeMessageIntoImageData(message: string, imgData: ImageData): Promise<ImageData> {
-  const binaryMessage = await messageToBinary(message);
+async function encodeMessageIntoImageData(message: string, imgData: ImageData): Promise<ImageData> { // функция которая принимает сообщение и изображение
+  const binaryMessage = await messageToBinary(message);                                              // и возвращает новое зашифрованное изображение
 
   const imagePixels = Array.from(imgData.data);
 
@@ -61,7 +65,7 @@ async function encodeMessageIntoImageData(message: string, imgData: ImageData): 
     if (((i + 1) % 4) === 0) continue; // не трогаем a-канал для совместимости с jpeg
     if (binaryMessageCounter > binaryMessage.length) break;
     let currentValue = imagePixels[i];
-    let encodedValue = ((currentValue >> 1) << 1) | binaryMessage[binaryMessageCounter];
+    let encodedValue = ((currentValue >> 1) << 1) | binaryMessage[binaryMessageCounter]; // ВОТ ТУТ собественно алгоритм шифрования отдельного бита пикселя
     imagePixels[i] = encodedValue;
     binaryMessageCounter++;
   }
@@ -69,7 +73,7 @@ async function encodeMessageIntoImageData(message: string, imgData: ImageData): 
   return new ImageData(new Uint8ClampedArray(imagePixels), imgData.width, imgData.height);
 }
 
-function decodeImageData(imgData: ImageData): string {
+function decodeImageData(imgData: ImageData): string { // функция которая принимает зашифрованное изображение и возвращает из него сообщение
   const imagePixels = Array.from(imgData.data);
 
   let messageBinaryLength: number[] = [];
@@ -78,10 +82,9 @@ function decodeImageData(imgData: ImageData): string {
   for (let i = 0; i < imagePixels.length; i++) {
     if (((i + 1) % 4) === 0) continue;
     if (binaryMessageCounter >= 32) break;
-    const leastSignificantBit = imagePixels[i] & 1;
+    const leastSignificantBit = imagePixels[i] & 1; // ВОТ ТУТ собственно формула расшифровки отдельного бита пикселя
     messageBinaryLength.push(leastSignificantBit);
     binaryMessageCounter++;
-    console.log(i);
   }
 
   const messageLength = parseInt(messageBinaryLength.join(''), 2);
@@ -112,7 +115,7 @@ function decodeImageData(imgData: ImageData): string {
   return result;
 }
 
-async function messageToBinary(message: string): Promise<number[]> {
+async function messageToBinary(message: string): Promise<number[]> { // функция которая конвертирует сообщение в бинарный вид
   const messageArray = message.split('');
 
   const messageBlob = new Blob(messageArray);
@@ -133,7 +136,7 @@ async function messageToBinary(message: string): Promise<number[]> {
   return flattenedMessageBits;
 }
 
-function fileToBase64(file: File): Promise<string> {
+function fileToBase64(file: File): Promise<string> { // функция которая конвертирует тип данных "файл" в строковое 64-битное представление
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
     reader.onload = () => resolve(<string>reader.result);
@@ -142,7 +145,7 @@ function fileToBase64(file: File): Promise<string> {
   });
 }
 
-function base64ToImageData(base64: string): Promise<ImageData> {
+function base64ToImageData(base64: string): Promise<ImageData> { // конвертирует строковое 64-битное представление в картинку
   return new Promise((resolve, reject) => {
     const img = new Image();
     const canvas = document.createElement('canvas');
@@ -159,7 +162,7 @@ function base64ToImageData(base64: string): Promise<ImageData> {
   });
 }
 
-function imageDataToBase64(imgData: ImageData): string {
+function imageDataToBase64(imgData: ImageData): string { // конвертирует картинку в строковое 64-битное представление
   const canvas = document.createElement('canvas');
   const ctx = canvas.getContext('2d');
   canvas.width = imgData.width;
@@ -168,7 +171,7 @@ function imageDataToBase64(imgData: ImageData): string {
   return canvas.toDataURL('image/png');
 }
 
-function decimalToBinary8Bit(num: number): number[] {
+function decimalToBinary8Bit(num: number): number[] {  // конвертирует 10-ричное число в двоичное восьмибитное
   let binaryAsString = num.toString(2);
   while (binaryAsString.length < 8) {
     binaryAsString = '0' + binaryAsString;
