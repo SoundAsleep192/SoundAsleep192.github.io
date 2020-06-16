@@ -7,28 +7,47 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-const encodeFileInput = document.getElementById('encodeFileInput');
-const downloadLink = document.createElement('a');
 const messageInput = document.getElementById('message');
-messageInput.value = 'Hello world';
+const encodeFileInput = document.getElementById('encodeFileInput');
+const encodeButton = document.getElementById('encodeButton');
+const downloadLink = document.createElement('a');
 const decodeFileInput = document.getElementById('decodeFileInput');
+const decodeButton = document.getElementById('decodeButton');
 encodeFileInput.addEventListener('change', () => __awaiter(this, void 0, void 0, function* () {
     const image = encodeFileInput.files[0];
     const imageBase64 = yield fileToBase64(image);
+    const previewImage = new Image(250);
+    previewImage.src = imageBase64;
+    document.getElementById('preview').appendChild(previewImage);
+}));
+encodeButton.addEventListener('click', () => __awaiter(this, void 0, void 0, function* () {
+    if (!encodeFileInput.files.length)
+        return;
+    const image = encodeFileInput.files[0];
+    const imageBase64 = yield fileToBase64(image);
     const imageData = yield base64ToImageData(imageBase64);
-    const message = messageInput.value ? messageInput.value : 'Hola Mundo';
+    const message = messageInput.value ? messageInput.value : 'Hello world';
     const encodedImageData = yield encodeMessageIntoImageData(message, imageData);
     downloadLink.href = imageDataToBase64(encodedImageData);
     downloadLink.download = 'encoded-' + image.name.match(/.+(?=\.)/gi)[0];
-    downloadLink.textContent = 'Download image';
-    document.body.appendChild(downloadLink);
+    downloadLink.textContent = 'Скачать зашифрованное изображение';
+    document.getElementById('result').appendChild(downloadLink);
 }));
 decodeFileInput.addEventListener('change', () => __awaiter(this, void 0, void 0, function* () {
     const image = decodeFileInput.files[0];
     const imageBase64 = yield fileToBase64(image);
+    const previewImage = new Image(250);
+    previewImage.src = imageBase64;
+    document.getElementById('preview2').appendChild(previewImage);
+}));
+decodeButton.addEventListener('click', () => __awaiter(this, void 0, void 0, function* () {
+    if (!decodeFileInput.files.length)
+        return;
+    const image = decodeFileInput.files[0];
+    const imageBase64 = yield fileToBase64(image);
     const imageData = yield base64ToImageData(imageBase64);
     const decodedMessage = decodeImageData(imageData);
-    console.log(decodedMessage);
+    document.getElementById('result2').textContent = decodedMessage;
 }));
 function encodeMessageIntoImageData(message, imgData) {
     return __awaiter(this, void 0, void 0, function* () {

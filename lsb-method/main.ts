@@ -1,31 +1,53 @@
-const encodeFileInput = <HTMLInputElement>document.getElementById('encodeFileInput');
-const downloadLink = document.createElement('a');
 const messageInput = <HTMLInputElement>document.getElementById('message');
-messageInput.value = 'Hello world';
+const encodeFileInput = <HTMLInputElement>document.getElementById('encodeFileInput');
+const encodeButton = document.getElementById('encodeButton');
+const downloadLink = document.createElement('a');
 const decodeFileInput = <HTMLInputElement>document.getElementById('decodeFileInput');
+const decodeButton = document.getElementById('decodeButton');
 
 encodeFileInput.addEventListener('change', async () => {
   const image = encodeFileInput.files[0];
   const imageBase64 = await fileToBase64(image);
+
+  const previewImage = new Image(250);
+  previewImage.src = imageBase64;
+  document.getElementById('preview').appendChild(previewImage);
+});
+
+encodeButton.addEventListener('click', async () => {
+  if (!encodeFileInput.files.length) return;
+  const image = encodeFileInput.files[0];
+  const imageBase64 = await fileToBase64(image);
   const imageData = await base64ToImageData(imageBase64);
 
-  const message = messageInput.value ? messageInput.value : 'Hola Mundo';
+  const message = messageInput.value ? messageInput.value : 'Hello world';
 
   const encodedImageData = await encodeMessageIntoImageData(message, imageData);
 
   downloadLink.href = imageDataToBase64(encodedImageData);
   downloadLink.download = 'encoded-' + image.name.match(/.+(?=\.)/gi)[0];
-  downloadLink.textContent = 'Download image';
-  document.body.appendChild(downloadLink);
-});
+  downloadLink.textContent = 'Скачать зашифрованное изображение';
+  document.getElementById('result').appendChild(downloadLink);
+})
 
 decodeFileInput.addEventListener('change', async () => {
+  const image = decodeFileInput.files[0];
+  const imageBase64 = await fileToBase64(image);
+
+  const previewImage = new Image(250);
+  previewImage.src = imageBase64;
+  document.getElementById('preview2').appendChild(previewImage);
+});
+
+decodeButton.addEventListener('click', async () => {
+  if (!decodeFileInput.files.length) return;
   const image = decodeFileInput.files[0];
   const imageBase64 = await fileToBase64(image);
   const imageData = await base64ToImageData(imageBase64);
 
   const decodedMessage = decodeImageData(imageData);
-  console.log(decodedMessage);
+
+  document.getElementById('result2').textContent = decodedMessage;
 });
 
 async function encodeMessageIntoImageData(message: string, imgData: ImageData): Promise<ImageData> {

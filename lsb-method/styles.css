@@ -1,0 +1,52 @@
+.main_wrapper {
+    display: flex;
+}
+
+.input_wrapper {
+    display: flex;
+    flex-direction: column;
+    width: 400px;
+    margin: 0 50px 30px;
+}
+
+.result_wrapper {
+    display: flex;
+    flex-direction: column;
+    width: 400px;
+    margin-bottom: 30px;
+}
+
+.text,
+.text2,
+.result,
+.result2 {
+    height: 100px;
+    margin-bottom: 10px;
+}
+
+.result2 {
+    font-size: large;
+    font-weight: bold;
+}
+
+.key_and_button {
+    display: flex;
+    justify-content: space-between;
+}
+
+.key,
+.key2 {
+    width: 220px;
+    height: 30px;
+    margin-bottom: 10px;
+}
+
+.button {
+    width: 150px;
+    height: 35px;
+    margin-bottom: 20px;
+}
+
+.input_file {
+    margin: 15px;
+}
