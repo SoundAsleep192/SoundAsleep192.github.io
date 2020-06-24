@@ -1,0 +1,43 @@
+*{
+margin: 0;
+padding: 0;
+}
+
+body{
+    background-color:dimgray;
+}
+/*
+body{
+    background: #606c88;
+    background: -webkit-linear-gradient(to right, #3f4c6b, #606c88);
+    background: linear-gradient(to right, #3f4c6b, #606c88); 
+}
+*/
+
+h1{
+    color: #fff;
+    text-align: center;
+    text-transform: uppercase;
+    
+    border: 1px solid red;
+}
+h2{
+    color: #dbdee8;
+}
+
+.Block1{
+    height: 100vh;
+}
+
+.Block2{
+    height: 100vh;
+    color: beige;
+    background: #485563;
+    background: -webkit-linear-gradient(to right, #29323c, #485563);  
+    background: linear-gradient(to right, #29323c, #485563); 
+}
+
+#messageToHide{
+    width: 250px;
+    height: 100px;
+}
