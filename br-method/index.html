@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Метод Брайндокса</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+    <h1>Встраивание текстовой информации в картинку методом Брайндокса</h1>
+    <h2>Программа поддерживает следующие типы данных:</h2>
+    <ul>
+        <li>Для встраимоего сообщения - символы ASCII (латиница, пробелы, пунктуационные знаки)</li>
+        <li>Для изображения, в которе встраивают - форматы .png и .jpg</li>
+    </ul>
+    <form class="form">
+        <div class="form-group">
+            <label for="baseFile">Загрузите зображение для расшифровки:</label>
+            <input class="form-control" type="file" name="baseFile" id="baseFile" onchange="previewEncodeImage()">
+        </div>
+
+        <div class="form-group">
+            <label for="yourMessage">Введите ваше сообщение:</label>
+            <textarea class="form-control message" id="yourMessage" rows="2" placeholder="Сообщение"
+                required></textarea>
+            <div id="count_message"></div>
+
+            <input type="text" id="key1" placeholder="0-255" required>
+            <input type="text" id="key2" placeholder="0-255" required>
+            <input type="text" id="key3" placeholder="0-255" required>
+        </div>
+        <div class="form-group">
+            <button class="write btn btn-default pull-right" onclick="writeMessage()">Записать сообщение</button>
+        </div>
+    </form>
+    <br>
+    <br>
+    <br>
+    <br>
+    <div class="error" style="display: none;"></div>
+
+    <div class="images" style="display: none;">
+        <div class="sourceImage" style="display: none;">
+            <h3>Original</h3>
+            <canvas></canvas>
+        </div>
+
+        <div class="modImage" style="display: none;">
+            <h3>Stegofile</h3>
+            <canvas id="dwn"></canvas>
+        </div>
+
+
+        <div class="stgkeyImage" style="display: none;">
+            <h3>Stegokey</h3>
+            <canvas></canvas>
+        </div>
+    </div>
+
+
+
+    <form class="form">
+        <div class="form-group">
+            <label for="decodeFile">Загрузите зображение для расшифровки:</label>
+            <input class="form-control" type="file" name="decodeFile" id="decodeFile" onchange="previewDecodeImage()">
+            <label for="stgKeyImage">Загрузите маску для расшифровки:</label>
+            <input class="form-control" type="file" name="stgKeyImage" id="stgKeyImage"
+                onchange="previewDecodeKeyImage()">
+
+            <input type="text" id="key1ex" placeholder="0-255" required>
+            <input type="text" id="key2ex" placeholder="0-255" required>
+            <input type="text" id="key3ex" placeholder="0-255" required>
+        </div>
+        <div class="form-group">
+            <button class="read btn btn-default pull-right" onclick="readMessage()">Извлечь сообщение</button>
+        </div>
+    </form>
+
+    <div class="binary-decode" style="display: none;">
+        <h3>Hidden message</h3>
+        <textarea class="form-control message" style="word-wrap:break-word;">
+    </textarea>
+    </div>
+
+    <div class="read" style="display: none;">
+        <h3>Input</h3>
+        <canvas></canvas>
+    </div>
+
+    <div class="decodekey" style="display: none;">
+        <h3>Key image</h3>
+        <canvas></canvas>
+    </div>
+
+    <h2>Исходный код программы:</h2>
+    <p>Логику программы можно посмотреть в исходном файле на github по этой <a
+            href="https://github.com/SoundAsleep192/SoundAsleep192.github.io/blob/master/br-method/">ссылке</a>
+    </p>
+
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script type="text/JavaScript" src="js/stg.js"></script>
+</body>
+
+</html>
